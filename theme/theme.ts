@@ -1,5 +1,5 @@
 export const colors = {
-  background: "#1D1616",
-  text: "white",
-  differentColor: "#8E1616",
+  background: "#121212",
+  text: "#E0E0E0",
+  differentColor: "#4CAF50",
 };

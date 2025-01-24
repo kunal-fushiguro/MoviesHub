@@ -1,6 +1,15 @@
-import { View, Text, Dimensions, StyleSheet, Image } from "react-native";
+import {
+  View,
+  Text,
+  Dimensions,
+  StyleSheet,
+  Image,
+  TouchableOpacity,
+} from "react-native";
 import React from "react";
 import { colors } from "@/theme/theme";
+import { useNavigation } from "@react-navigation/native";
+import { NativeStackNavigationProp } from "react-native-screens/lib/typescript/native-stack/types";
 
 interface Props {
   imgUrl: string;
@@ -8,6 +17,7 @@ interface Props {
   releaseDate: string;
   voteAverage: number;
   overview: string;
+  id: string;
 }
 
 const { width } = Dimensions.get("window");
@@ -18,7 +28,14 @@ const MoviesCard = ({
   releaseDate,
   voteAverage,
   overview,
+  id,
 }: Props) => {
+  const navigation = useNavigation<NativeStackNavigationProp<any>>();
+
+  const handleClick = () => {
+    navigation.navigate("MoviesDetails", { id });
+  };
+
   return (
     <View style={styles.card}>
       {/* Movie Poster */}
@@ -35,6 +52,11 @@ const MoviesCard = ({
           {overview}
         </Text>
       </View>
+      <TouchableOpacity onPress={handleClick}>
+        <View style={styles.buttonStyle}>
+          <Text style={{ color: colors.text }}>Read more</Text>
+        </View>
+      </TouchableOpacity>
     </View>
   );
 };
@@ -85,6 +107,13 @@ const styles = StyleSheet.create({
   overview: {
     color: colors.text,
     fontSize: 12,
+  },
+  buttonStyle: {
+    width: "auto",
+    backgroundColor: colors.differentColor,
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 10,
   },
 });
 

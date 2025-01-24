@@ -35,6 +35,7 @@ const ListMovies = ({ title, data }: Props) => {
             releaseDate={item.release_date}
             voteAverage={item.vote_average}
             overview={item.overview}
+            id={item.id}
           />
         ))}
       </ScrollView>

@@ -1,8 +1,14 @@
 import React from "react";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import HomeScreen from "./HomeScreen";
+import MoviesDetails from "./MoviesDetails";
 
-const Stack = createNativeStackNavigator();
+type RootStackParamList = {
+  Home: undefined;
+  MoviesDetails: { id: number };
+};
+
+const Stack = createNativeStackNavigator<RootStackParamList>();
 
 const RootLayout = () => {
   return (
@@ -11,6 +17,11 @@ const RootLayout = () => {
         name="Home"
         options={{ headerShown: false }}
         component={HomeScreen}
+      />
+      <Stack.Screen
+        name="MoviesDetails"
+        options={{ headerShown: false }}
+        component={MoviesDetails}
       />
     </Stack.Navigator>
   );
