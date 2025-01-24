@@ -6,7 +6,10 @@ import {
   Image,
   ScrollView,
   Dimensions,
+  TouchableOpacity,
 } from "react-native";
+import { useNavigation } from "@react-navigation/native";
+import { NativeStackNavigationProp } from "react-native-screens/lib/typescript/native-stack/types";
 
 export const colors = {
   background: "#121212",
@@ -14,6 +17,7 @@ export const colors = {
   text: "#E0E0E0",
   accent: "#BB86FC",
   textSecondary: "#A0A0A0",
+  differentColor: "#4CAF50",
 };
 
 interface actor {
@@ -36,6 +40,8 @@ interface Porps {
 }
 
 const CastList = ({ cast }: Porps) => {
+  const navigation = useNavigation<NativeStackNavigationProp<any>>();
+
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Cast</Text>
@@ -45,21 +51,34 @@ const CastList = ({ cast }: Porps) => {
         style={styles.scrollView}
       >
         {cast.map((actor) => (
-          <View key={actor.id} style={styles.card}>
-            {/* Actor Image */}
-            <Image
-              source={{
-                uri: `https://image.tmdb.org/t/p/w500${actor.profile_path}`,
+          <View key={actor.id}>
+            <View style={styles.card}>
+              {/* Actor Image */}
+              <Image
+                source={{
+                  uri: `https://image.tmdb.org/t/p/w500${actor.profile_path}`,
+                }}
+                style={styles.image}
+              />
+              {/* Actor Info */}
+              <Text style={styles.name} numberOfLines={1}>
+                {actor.name}
+              </Text>
+              <Text style={styles.character} numberOfLines={1}>
+                as {actor.character}
+              </Text>
+            </View>
+            <TouchableOpacity
+              onPress={() => {
+                navigation.navigate("PersonDetails", { id: actor.id });
               }}
-              style={styles.image}
-            />
-            {/* Actor Info */}
-            <Text style={styles.name} numberOfLines={1}>
-              {actor.name}
-            </Text>
-            <Text style={styles.character} numberOfLines={1}>
-              as {actor.character}
-            </Text>
+            >
+              <View style={styles.buttonStyle}>
+                <Text style={{ color: colors.text, textAlign: "center" }}>
+                  Read more
+                </Text>
+              </View>
+            </TouchableOpacity>
           </View>
         ))}
       </ScrollView>
@@ -111,6 +130,16 @@ const styles = StyleSheet.create({
     textAlign: "center",
     marginBottom: 8,
     paddingHorizontal: 4,
+  },
+  buttonStyle: {
+    width: 120,
+    backgroundColor: colors.differentColor,
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 10,
+    marginHorizontal: "auto",
+    marginVertical: 10,
+    textAlign: "center",
   },
 });
 

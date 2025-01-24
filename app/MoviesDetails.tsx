@@ -1,9 +1,10 @@
 import CastList from "@/components/CastList";
+import LoadingScreen from "@/components/LoadingScreen";
 import ListMovies from "@/components/MoviesList";
 import { credits, oneMovie, recommendation } from "@/temp/tempdata";
 import { colors } from "@/theme/theme";
 import { RouteProp, useRoute } from "@react-navigation/native";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { StyleSheet, View, Text, Image, ScrollView } from "react-native";
 
 type RootStackParamList = {
@@ -35,63 +36,77 @@ interface MovieDetails {
 const MovieDetails = () => {
   const route = useRoute<RouteProp<RootStackParamList, "MoviesDetails">>();
   const { id } = route.params;
-  const [movie, setMovie] = useState<MovieDetails>(oneMovie);
+  const [movie, setMovie] = useState<MovieDetails | null>(null);
+  const [loading, setLoading] = useState(true);
 
-  return (
-    <ScrollView style={styles.container}>
-      {/* Backdrop Image */}
-      <Image
-        source={{
-          uri: `https://image.tmdb.org/t/p/w500${movie.backdrop_path}`,
-        }}
-        style={styles.backdrop}
-      />
-      {/* Poster and Title */}
-      <View style={styles.header}>
+  useEffect(() => {
+    setTimeout(() => {
+      setMovie(oneMovie);
+      setLoading(false);
+    }, 2000);
+  }, [id]);
+
+  if (loading) {
+    return <LoadingScreen />;
+  }
+
+  if (movie) {
+    return (
+      <ScrollView style={styles.container}>
+        {/* Backdrop Image */}
         <Image
           source={{
-            uri: `https://image.tmdb.org/t/p/w500${movie.poster_path}`,
+            uri: `https://image.tmdb.org/t/p/w500${movie.backdrop_path}`,
           }}
-          style={styles.poster}
+          style={styles.backdrop}
         />
-        <View style={styles.titleContainer}>
-          <Text style={styles.title}>{movie.title}</Text>
-          <Text style={styles.tagline}>{movie.tagline}</Text>
+        {/* Poster and Title */}
+        <View style={styles.header}>
+          <Image
+            source={{
+              uri: `https://image.tmdb.org/t/p/w500${movie.poster_path}`,
+            }}
+            style={styles.poster}
+          />
+          <View style={styles.titleContainer}>
+            <Text style={styles.title}>{movie.title}</Text>
+            <Text style={styles.tagline}>{movie.tagline}</Text>
+          </View>
         </View>
-      </View>
-      {/* Details Section */}
-      <View style={styles.details}>
-        <Text style={styles.sectionTitle}>Overview</Text>
-        <Text style={styles.overview}>{movie.overview}</Text>
+        {/* Details Section */}
+        <View style={styles.details}>
+          <Text style={styles.sectionTitle}>Overview</Text>
+          <Text style={styles.overview}>{movie.overview}</Text>
 
-        <Text style={styles.sectionTitle}>Genres</Text>
-        <Text style={styles.text}>
-          {movie.genres.map((genre) => genre.name).join(", ")}
-        </Text>
-
-        <Text style={styles.sectionTitle}>Details</Text>
-        <Text style={styles.text}>Release Date: {movie.release_date}</Text>
-        <Text style={styles.text}>Runtime: {movie.runtime} mins</Text>
-        <Text style={styles.text}>
-          Rating: {movie.vote_average} ({movie.vote_count} votes)
-        </Text>
-        <Text style={styles.text}>
-          Revenue: ${movie.revenue.toLocaleString()}
-        </Text>
-
-        <Text style={styles.sectionTitle}>Production Companies</Text>
-        {movie.production_companies.map((company, index) => (
-          <Text key={index} style={styles.text}>
-            {company.name} ({company.origin_country})
+          <Text style={styles.sectionTitle}>Genres</Text>
+          <Text style={styles.text}>
+            {movie.genres.map((genre) => genre.name).join(", ")}
           </Text>
-        ))}
-      </View>
-      {/* Cast Lists */}
-      <CastList cast={credits.cast} />
-      {/* Recommendations */}
-      <ListMovies data={recommendation.results} title="Recommendations" />
-    </ScrollView>
-  );
+
+          <Text style={styles.sectionTitle}>Details</Text>
+          <Text style={styles.text}>Release Date: {movie.release_date}</Text>
+          <Text style={styles.text}>Runtime: {movie.runtime} mins</Text>
+          <Text style={styles.text}>
+            Rating: {movie.vote_average} ({movie.vote_count} votes)
+          </Text>
+          <Text style={styles.text}>
+            Revenue: ${movie.revenue.toLocaleString()}
+          </Text>
+
+          <Text style={styles.sectionTitle}>Production Companies</Text>
+          {movie.production_companies.map((company, index) => (
+            <Text key={index} style={styles.text}>
+              {company.name} ({company.origin_country})
+            </Text>
+          ))}
+        </View>
+        {/* Cast Lists */}
+        <CastList cast={credits.cast} />
+        {/* Recommendations */}
+        <ListMovies data={recommendation.results} title="Recommendations" />
+      </ScrollView>
+    );
+  }
 };
 
 const styles = StyleSheet.create({
