@@ -13,6 +13,7 @@ import { RouteProp, useRoute } from "@react-navigation/native";
 import { personDetails, creditsMovies } from "@/temp/tempdata";
 import ListMovies from "@/components/MoviesList";
 import LoadingScreen from "@/components/LoadingScreen";
+import Topbar from "@/components/Topbar";
 
 type RootStackParamList = {
   Home: undefined;
@@ -67,35 +68,39 @@ const PersonDetails = () => {
 
   if (personData && work) {
     return (
-      <ScrollView style={styles.container}>
-        <View style={styles.imageContainer}>
-          <Image
-            source={{
-              uri: "https://image.tmdb.org/t/p/w500/" + personData.profile_path,
-            }}
-            style={styles.profileImage}
-          />
-        </View>
-        <View style={styles.detailsContainer}>
-          <Text style={styles.name}>{personData.name}</Text>
-          <Text style={styles.label}>Biography</Text>
-          <Text style={styles.biography}>{personData.biography}</Text>
-          <Text style={styles.label}>Born</Text>
-          <Text style={styles.text}>
-            {personData.birthday} in {personData.place_of_birth}
-          </Text>
-          <TouchableOpacity
-            style={styles.homepageButton}
-            onPress={() => {
-              Linking.openURL(personData.homepage);
-            }}
-          >
-            <Text style={styles.homepageText}>Visit Homepage</Text>
-          </TouchableOpacity>
-        </View>
-        {/* person movies */}
-        <ListMovies data={work} title="Work" />
-      </ScrollView>
+      <>
+        <ScrollView style={styles.container}>
+          <Topbar marginTop={5} />
+          <View style={styles.imageContainer}>
+            <Image
+              source={{
+                uri:
+                  "https://image.tmdb.org/t/p/w500/" + personData.profile_path,
+              }}
+              style={styles.profileImage}
+            />
+          </View>
+          <View style={styles.detailsContainer}>
+            <Text style={styles.name}>{personData.name}</Text>
+            <Text style={styles.label}>Biography</Text>
+            <Text style={styles.biography}>{personData.biography}</Text>
+            <Text style={styles.label}>Born</Text>
+            <Text style={styles.text}>
+              {personData.birthday} in {personData.place_of_birth}
+            </Text>
+            <TouchableOpacity
+              style={styles.homepageButton}
+              onPress={() => {
+                Linking.openURL(personData.homepage);
+              }}
+            >
+              <Text style={styles.homepageText}>Visit Homepage</Text>
+            </TouchableOpacity>
+          </View>
+          {/* person movies */}
+          <ListMovies data={work} title="Work" />
+        </ScrollView>
+      </>
     );
   }
 };
