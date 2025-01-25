@@ -5,6 +5,7 @@ import MoviesDetails from "./MoviesDetails";
 import PersonDetails from "./PersonDetails";
 import SearchScreen from "./SearchScreen";
 import { RootStackParamList } from "@/types";
+import AllMoviesList from "./AllMoviesList";
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
@@ -30,6 +31,11 @@ const RootLayout = () => {
         name="SerachScreen"
         options={{ headerShown: false }}
         component={SearchScreen}
+      />
+      <Stack.Screen
+        name="AllMoviesList"
+        options={{ headerShown: false }}
+        component={AllMoviesList}
       />
     </Stack.Navigator>
   );

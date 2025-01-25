@@ -12,10 +12,16 @@ import { colors } from "@/theme/theme";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "react-native-screens/lib/typescript/native-stack/types";
+import MoviesListVertically from "@/components/MoviesListVertically";
+import { CardsTypesTwo } from "@/types";
+import { trendData } from "@/temp/tempdata";
 
 const SearchScreen = () => {
   const navigation = useNavigation<NativeStackNavigationProp<any>>();
   const [text, onChangeText] = useState("");
+  const [loading, setLoading] = useState<boolean>(false);
+  const [data, setData] = useState<CardsTypesTwo[] | null>(trendData.results);
+
   return (
     <ScrollView>
       <View style={style.container}>
@@ -37,6 +43,7 @@ const SearchScreen = () => {
           </TouchableOpacity>
         </View>
         {/* Results of Search */}
+        <MoviesListVertically title="Results" data={data} />
       </View>
     </ScrollView>
   );
