@@ -3,19 +3,25 @@ import React, { useState } from "react";
 import { colors } from "@/theme/theme";
 import Carousel from "react-native-reanimated-carousel";
 import TrendingMoviesCards from "./TrendingMoviesCards";
-import { trendData } from "@/temp/tempdata";
 
-const TrendingSection = () => {
+import { CardsTypesTwo } from "@/types";
+
+interface Props {
+  trendData: CardsTypesTwo[];
+}
+
+const TrendingSection = ({ trendData }: Props) => {
   const baseUrl = "https://image.tmdb.org/t/p/w500/";
-  const [data, setData] = useState(trendData.results);
+
   const width = Dimensions.get("window");
+
   return (
     <View style={style.conatiner}>
       <View style={{ flex: 1 }}>
         <Carousel
           width={width.width}
           height={width.height * 0.6}
-          data={data}
+          data={trendData}
           loop
           autoPlay
           autoPlayInterval={5000}

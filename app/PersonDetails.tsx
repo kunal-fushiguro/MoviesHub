@@ -10,68 +10,83 @@ import {
   TouchableOpacity,
 } from "react-native";
 import { RouteProp, useRoute } from "@react-navigation/native";
-import { personDetails, creditsMovies } from "@/temp/tempdata";
 import ListMovies from "@/components/MoviesList";
 import LoadingScreen from "@/components/LoadingScreen";
 import Topbar from "@/components/Topbar";
 import { CardsTypesTwo, CastDetails, RootStackParamList } from "@/types";
+import { useQuery } from "@tanstack/react-query";
+import ErrorComponent from "@/components/Error";
+import { personDetails, personDetailsWork } from "@/api";
 
 const PersonDetails = () => {
-  const [personData, setPersonData] = useState<CastDetails | null>(null);
-  const [work, setWork] = useState<CardsTypesTwo[] | null>(null);
-  const [loading, setLoading] = useState(true);
   const route = useRoute<RouteProp<RootStackParamList, "PersonDetails">>();
   const { id } = route.params;
 
-  useEffect(() => {
-    setTimeout(() => {
-      setPersonData(personDetails);
-      setWork(creditsMovies.cast);
-      setLoading(false);
-    }, 2000);
-  }, [id]);
+  const {
+    data: personData,
+    isLoading,
+    isError,
+  } = useQuery<CastDetails>({
+    queryKey: ["person", id],
+    queryFn: () => personDetails(id),
+  });
+  const {
+    data: personWork,
+    isLoading: personWorkLoading,
+    isError: personWorkError,
+  } = useQuery<CardsTypesTwo[]>({
+    queryKey: ["personWork", id],
+    queryFn: () => personDetailsWork(id),
+  });
 
+  const error = isError || personWorkError;
+  const loading = isLoading || personWorkLoading;
   if (loading) {
     return <LoadingScreen />;
   }
 
-  if (personData && work) {
-    return (
-      <>
-        <ScrollView style={styles.container}>
-          <Topbar marginTop={5} />
-          <View style={styles.imageContainer}>
-            <Image
-              source={{
-                uri:
-                  "https://image.tmdb.org/t/p/w500/" + personData.profile_path,
-              }}
-              style={styles.profileImage}
-            />
-          </View>
-          <View style={styles.detailsContainer}>
-            <Text style={styles.name}>{personData.name}</Text>
-            <Text style={styles.label}>Biography</Text>
-            <Text style={styles.biography}>{personData.biography}</Text>
-            <Text style={styles.label}>Born</Text>
-            <Text style={styles.text}>
-              {personData.birthday} in {personData.place_of_birth}
-            </Text>
-            <TouchableOpacity
-              style={styles.homepageButton}
-              onPress={() => {
-                Linking.openURL(personData.homepage);
-              }}
-            >
-              <Text style={styles.homepageText}>Visit Homepage</Text>
-            </TouchableOpacity>
-          </View>
-          {/* person movies */}
-          <ListMovies data={work} title="Work" />
-        </ScrollView>
-      </>
-    );
+  if (error) {
+    return <ErrorComponent />;
   }
+
+  return (
+    <>
+      <ScrollView style={styles.container}>
+        <Topbar marginTop={5} />
+        <View style={styles.imageContainer}>
+          <Image
+            source={{
+              uri: "https://image.tmdb.org/t/p/w500/" + personData.profile_path,
+            }}
+            style={styles.profileImage}
+          />
+        </View>
+        <View style={styles.detailsContainer}>
+          <Text style={styles.name}>{personData.name}</Text>
+          <Text style={styles.label}>Biography</Text>
+          <Text style={styles.biography}>{personData.biography}</Text>
+          <Text style={styles.label}>Born</Text>
+          <Text style={styles.text}>
+            {personData.birthday} in {personData.place_of_birth}
+          </Text>
+          <TouchableOpacity
+            style={styles.homepageButton}
+            onPress={() => {
+              Linking.openURL(personData.homepage);
+            }}
+          >
+            <Text style={styles.homepageText}>Visit Homepage</Text>
+          </TouchableOpacity>
+        </View>
+        {/* person movies */}
+        <ListMovies
+          data={personWork}
+          title="Work"
+          fetchType="recommendations"
+        />
+      </ScrollView>
+    </>
+  );
 };
 
 const styles = StyleSheet.create({

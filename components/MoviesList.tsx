@@ -1,8 +1,15 @@
-import { View, Text, StyleSheet, ScrollView } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  ScrollView,
+  TouchableOpacity,
+} from "react-native";
 import React, { useState } from "react";
 import { colors } from "@/theme/theme";
 import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
-
+import { useNavigation } from "@react-navigation/native";
+import { NativeStackNavigationProp } from "react-native-screens/lib/typescript/native-stack/types";
 import MoviesCard from "./MoviesCard";
 import { CardsTypesTwo } from "@/types";
 
@@ -11,15 +18,29 @@ const baseUrl = "https://image.tmdb.org/t/p/w500/";
 interface Props {
   title: string;
   data: CardsTypesTwo[];
+  fetchType:
+    | "popular"
+    | "now_playing"
+    | "top_rated"
+    | "upcoming"
+    | "recommendations";
 }
 
-const ListMovies = ({ title, data }: Props) => {
+const ListMovies = ({ title, data, fetchType }: Props) => {
+  const navigation = useNavigation<NativeStackNavigationProp<any>>();
+
   return (
     <View style={styles.container}>
       {/* Top Bar */}
       <View style={styles.topContainer}>
         <Text style={styles.title}>{title}</Text>
-        <FontAwesome5 name="plus" size={24} color={colors.differentColor} />
+        <TouchableOpacity
+          onPress={() => {
+            navigation.navigate("");
+          }}
+        >
+          <FontAwesome5 name="plus" size={24} color={colors.differentColor} />
+        </TouchableOpacity>
       </View>
 
       {/* Horizontal Scrollable Movie Cards */}
@@ -50,6 +71,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginVertical: 20,
     gap: 20,
+    paddingBottom: 20,
   },
   topContainer: {
     flexDirection: "row",

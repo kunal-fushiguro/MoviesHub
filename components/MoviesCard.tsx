@@ -72,6 +72,7 @@ const styles = StyleSheet.create({
     justifyContent: "flex-start",
     alignItems: "center",
     gap: 10,
+    marginBottom: 10,
   },
   imgContainer: {
     width: "100%",
