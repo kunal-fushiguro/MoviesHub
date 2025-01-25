@@ -14,42 +14,11 @@ import { personDetails, creditsMovies } from "@/temp/tempdata";
 import ListMovies from "@/components/MoviesList";
 import LoadingScreen from "@/components/LoadingScreen";
 import Topbar from "@/components/Topbar";
-
-type RootStackParamList = {
-  Home: undefined;
-  castsDetails: { id: number };
-  PersonDetails: { id: number };
-};
-
-interface CastDetails {
-  name: string;
-  biography: string;
-  birthday: string;
-  place_of_birth: string;
-  homepage: string;
-  profile_path: string;
-}
-
-interface CardsListProps {
-  adult: boolean;
-  backdrop_path: string | null;
-  genre_ids: number[];
-  id: number;
-  original_language: string;
-  original_title: string;
-  overview: string;
-  popularity: number;
-  poster_path: string | null;
-  release_date: string;
-  title: string;
-  video: boolean;
-  vote_average: number;
-  vote_count: number;
-}
+import { CardsTypesTwo, CastDetails, RootStackParamList } from "@/types";
 
 const PersonDetails = () => {
   const [personData, setPersonData] = useState<CastDetails | null>(null);
-  const [work, setWork] = useState<CardsListProps[] | null>(null);
+  const [work, setWork] = useState<CardsTypesTwo[] | null>(null);
   const [loading, setLoading] = useState(true);
   const route = useRoute<RouteProp<RootStackParamList, "PersonDetails">>();
   const { id } = route.params;

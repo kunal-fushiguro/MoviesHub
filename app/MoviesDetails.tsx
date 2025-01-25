@@ -4,40 +4,15 @@ import ListMovies from "@/components/MoviesList";
 import Topbar from "@/components/Topbar";
 import { credits, oneMovie, recommendation } from "@/temp/tempdata";
 import { colors } from "@/theme/theme";
+import { CardsTypes, RootStackParamList } from "@/types";
 import { RouteProp, useRoute } from "@react-navigation/native";
 import React, { useEffect, useState } from "react";
 import { StyleSheet, View, Text, Image, ScrollView } from "react-native";
 
-type RootStackParamList = {
-  Home: undefined;
-  MoviesDetails: { id: number };
-};
-
-interface MovieDetails {
-  title: string;
-  backdrop_path: string;
-  poster_path: string;
-  genres: {
-    id: number;
-    name: string;
-  }[];
-  overview: string;
-  tagline: string;
-  release_date: string;
-  runtime: number;
-  vote_average: number;
-  vote_count: number;
-  revenue: number;
-  production_companies: {
-    name: string;
-    origin_country: string;
-  }[];
-}
-
 const MovieDetails = () => {
   const route = useRoute<RouteProp<RootStackParamList, "MoviesDetails">>();
   const { id } = route.params;
-  const [movie, setMovie] = useState<MovieDetails | null>(null);
+  const [movie, setMovie] = useState<CardsTypes | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {

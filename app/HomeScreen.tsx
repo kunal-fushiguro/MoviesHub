@@ -14,33 +14,21 @@ import { colors } from "@/theme/theme";
 import TrendingSection from "@/components/TrendingSection";
 import UpCommingMovies from "@/components/MoviesList";
 import LoadingScreen from "@/components/LoadingScreen";
-
-interface CardsListProps {
-  adult: boolean;
-  backdrop_path: string | null;
-  genre_ids: number[];
-  id: number;
-  original_language: string;
-  original_title: string;
-  overview: string;
-  popularity: number;
-  poster_path: string | null;
-  release_date: string;
-  title: string;
-  video: boolean;
-  vote_average: number;
-  vote_count: number;
-}
+import { useNavigation } from "@react-navigation/native";
+import { NativeStackNavigationProp } from "react-native-screens/lib/typescript/native-stack/types";
+import { CardsTypesTwo } from "@/types";
 
 const HomeScreen = () => {
-  const [upCommingData, setUpCommingData] = useState<CardsListProps[] | null>(
+  const [upCommingData, setUpCommingData] = useState<CardsTypesTwo[] | null>(
     null
   );
-  const [popularMovies, setpopularMovies] = useState<CardsListProps[] | null>(
+  const [popularMovies, setpopularMovies] = useState<CardsTypesTwo[] | null>(
     null
   );
 
   const [loading, setLoading] = useState(true);
+
+  const navigation = useNavigation<NativeStackNavigationProp<any>>();
 
   useEffect(() => {
     setTimeout(() => {
@@ -66,7 +54,11 @@ const HomeScreen = () => {
                 <Text style={style.differentText}>M</Text>ovie
                 <Text style={style.differentText}>H</Text>ub
               </Text>
-              <TouchableOpacity>
+              <TouchableOpacity
+                onPress={() => {
+                  navigation.navigate("SerachScreen");
+                }}
+              >
                 <FontAwesome name="search" size={30} color="white" />
               </TouchableOpacity>
             </View>

@@ -10,30 +10,8 @@ import {
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "react-native-screens/lib/typescript/native-stack/types";
-
-export const colors = {
-  background: "#121212",
-  surface: "#1E1E1E",
-  text: "#E0E0E0",
-  accent: "#BB86FC",
-  textSecondary: "#A0A0A0",
-  differentColor: "#4CAF50",
-};
-
-interface actor {
-  adult: boolean;
-  gender: number;
-  id: number;
-  known_for_department: string;
-  name: string;
-  original_name: string;
-  popularity: number;
-  profile_path: string | null;
-  cast_id: number;
-  character: string;
-  credit_id: string;
-  order: number;
-}
+import { actor } from "@/types";
+import { colorsTwo } from "@/theme/theme";
 
 interface Porps {
   cast: actor[];
@@ -74,7 +52,7 @@ const CastList = ({ cast }: Porps) => {
               }}
             >
               <View style={styles.buttonStyle}>
-                <Text style={{ color: colors.text, textAlign: "center" }}>
+                <Text style={{ color: colorsTwo.text, textAlign: "center" }}>
                   Read more
                 </Text>
               </View>
@@ -88,12 +66,12 @@ const CastList = ({ cast }: Porps) => {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: colors.background,
+    backgroundColor: colorsTwo.background,
     paddingVertical: 20,
     paddingHorizontal: 10,
   },
   title: {
-    color: colors.text,
+    color: colorsTwo.text,
     fontSize: 25,
     fontWeight: "bold",
     marginBottom: 10,
@@ -106,7 +84,7 @@ const styles = StyleSheet.create({
     width: Dimensions.get("screen").width / 2,
     height: Dimensions.get("screen").height / 3,
     marginRight: 16,
-    backgroundColor: colors.surface,
+    backgroundColor: colorsTwo.surface,
     borderRadius: 8,
     overflow: "hidden",
     alignItems: "center",
@@ -117,7 +95,7 @@ const styles = StyleSheet.create({
     resizeMode: "cover",
   },
   name: {
-    color: colors.text,
+    color: colorsTwo.text,
     fontSize: 16,
     fontWeight: "bold",
     textAlign: "center",
@@ -125,7 +103,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 4,
   },
   character: {
-    color: colors.textSecondary,
+    color: colorsTwo.textSecondary,
     fontSize: 14,
     textAlign: "center",
     marginBottom: 8,
@@ -133,7 +111,7 @@ const styles = StyleSheet.create({
   },
   buttonStyle: {
     width: 120,
-    backgroundColor: colors.differentColor,
+    backgroundColor: colorsTwo.differentColor,
     paddingVertical: 10,
     paddingHorizontal: 20,
     borderRadius: 10,
