@@ -1,26 +1,37 @@
 import {
   View,
-  Text,
   StyleSheet,
   ScrollView,
   Dimensions,
   TextInput,
   TouchableOpacity,
+  Text,
 } from "react-native";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { colors } from "@/theme/theme";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "react-native-screens/lib/typescript/native-stack/types";
 import MoviesListVertically from "@/components/MoviesListVertically";
 import { CardsTypesTwo } from "@/types";
-import { trendData } from "@/temp/tempdata";
+import LoadingScreen from "@/components/LoadingScreen";
+import { searchMovies } from "@/api";
 
 const SearchScreen = () => {
   const navigation = useNavigation<NativeStackNavigationProp<any>>();
   const [text, onChangeText] = useState("");
   const [loading, setLoading] = useState<boolean>(false);
-  const [data, setData] = useState<CardsTypesTwo[] | null>(trendData.results);
+  const [data, setData] = useState<CardsTypesTwo[] | null>(null);
+
+  useEffect(() => {
+    const fetchTypeData = async () => {
+      setLoading(true);
+      const data = await searchMovies(text);
+      setLoading(false);
+      setData(data);
+    };
+    fetchTypeData();
+  }, [text]);
 
   return (
     <ScrollView>
@@ -43,7 +54,15 @@ const SearchScreen = () => {
           </TouchableOpacity>
         </View>
         {/* Results of Search */}
-        <MoviesListVertically title="Results" data={data} />
+        {data == null && loading == false && (
+          <View style={style.noResults}>
+            <Text style={style.text}>No Result</Text>
+          </View>
+        )}
+        {loading && <LoadingScreen />}
+        {data != null && loading == false && (
+          <MoviesListVertically title="Results" data={data} />
+        )}
       </View>
     </ScrollView>
   );
@@ -52,6 +71,8 @@ const SearchScreen = () => {
 const style = StyleSheet.create({
   text: {
     color: colors.text,
+    fontWeight: "bold",
+    fontSize: 40,
   },
   container: {
     flex: 1,
@@ -77,6 +98,9 @@ const style = StyleSheet.create({
     position: "absolute",
     top: 25,
     right: 30,
+  },
+  noResults: {
+    margin: "auto",
   },
 });
 

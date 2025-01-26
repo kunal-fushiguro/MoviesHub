@@ -66,6 +66,14 @@ async function personDetailsWork(
   return results;
 }
 
+async function searchMovies(searchText: string) {
+  const url = `https://api.themoviedb.org/3/search/movie?query=${searchText}&include_adult=false&language=en-US&page=1`;
+  const response = await fetch(url, options);
+  const data = await response.json();
+  const results: CardsTypesTwo[] = data.results;
+  return results;
+}
+
 export {
   moviesLists,
   movieDetailsData,
@@ -73,4 +81,5 @@ export {
   moviesRecommendations,
   personDetails,
   personDetailsWork,
+  searchMovies,
 };

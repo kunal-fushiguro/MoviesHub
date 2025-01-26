@@ -36,7 +36,7 @@ const ListMovies = ({ title, data, fetchType }: Props) => {
         <Text style={styles.title}>{title}</Text>
         <TouchableOpacity
           onPress={() => {
-            navigation.navigate("");
+            navigation.navigate("AllMoviesList", { fetchType });
           }}
         >
           <FontAwesome5 name="plus" size={24} color={colors.differentColor} />

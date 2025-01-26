@@ -41,7 +41,9 @@ type RootStackParamList = {
   MoviesDetails: { id: number };
   PersonDetails: { id: number };
   SerachScreen: undefined;
-  AllMoviesList: { typeName: string };
+  AllMoviesList: {
+    fetchType: "popular" | "now_playing" | "top_rated" | "upcoming";
+  };
 };
 
 interface CastDetails {
